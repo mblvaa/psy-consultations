@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Админка записи на консультации</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="admin-page">
+  <div class="page">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">
+          <span>П</span>
+        </div>
+
+        <div class="brand-text">
+          <p class="eyebrow">Панель администратора</p>
+          <h1>Управление расписанием</h1>
+        </div>
+      </div>
+
+      <p class="header-note">
+        Здесь можно закрывать и снова открывать временные слоты. Закрытые слоты будут видны студентам как недоступные.
+      </p>
+    </header>
+
+    <main class="admin-layout">
+      <section id="loginCard" class="admin-card">
+        <div class="section-heading">
+          <p class="eyebrow">Вход</p>
+          <h2>Введите пароль администратора</h2>
+          <p>
+            Пароль берётся из Script Properties в Google Apps Script, из поля ADMIN_PASSWORD.
+          </p>
+        </div>
+
+        <form id="adminLoginForm" class="admin-login">
+          <label class="field">
+            <span>Пароль администратора</span>
+            <input
+              id="adminPassword"
+              type="password"
+              placeholder="Введите пароль"
+              autocomplete="current-password"
+              required
+            />
+          </label>
+
+          <button class="primary-button" type="submit">
+            Войти
+          </button>
+        </form>
+      </section>
+
+      <section id="adminPanel" class="admin-card hidden">
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Расписание</p>
+            <h2>Слоты консультаций</h2>
+            <p>
+              Нажмите «Закрыть», чтобы сделать слот недоступным для выбора на сайте. Нажмите «Открыть», чтобы вернуть его.
+            </p>
+          </div>
+
+          <div class="admin-toolbar-buttons">
+            <button id="refreshButton" class="secondary-button" type="button">
+              Обновить
+            </button>
+
+            <button id="logoutButton" class="danger-button" type="button">
+              Выйти
+            </button>
+          </div>
+        </div>
+
+        <div id="adminStatus" class="status-line">
+          Расписание ещё не загружено.
+        </div>
+
+        <div id="adminMessage" class="message" hidden></div>
+
+        <div class="schedule-wrap">
+          <div id="adminScheduleGrid" class="schedule-grid" aria-label="Административное расписание">
+            <!-- Расписание создаётся автоматически через admin.js -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        После закрытия или открытия слота обновите основную страницу сайта, чтобы проверить отображение для студентов.
+      </p>
+
+      <a href="index.html">Вернуться на сайт</a>
+    </footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
