@@ -252,11 +252,7 @@ form.addEventListener("submit", async (event) => {
   };
 
   try {
-    await fetch(apiUrl, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
-    });
+    await postToAppsScript(apiUrl, payload);
 
     form.reset();
     selectedSlots.clear();
@@ -288,4 +284,54 @@ function hideMessage() {
   statusMessage.hidden = true;
   statusMessage.textContent = "";
   statusMessage.className = "message";
+}
+
+function postToAppsScript(url, payload) {
+  return new Promise((resolve) => {
+    const iframeName = `psyPostFrame_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+
+    const iframe = document.createElement("iframe");
+    iframe.name = iframeName;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = url;
+    form.target = iframeName;
+    form.style.display = "none";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify(payload);
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve({ ok: true });
+    }, 1500);
+
+    iframe.onload = () => {
+      clearTimeout(timer);
+      setTimeout(() => {
+        cleanup();
+        resolve({ ok: true });
+      }, 200);
+    };
+
+    function cleanup() {
+      if (form.parentNode) {
+        form.parentNode.removeChild(form);
+      }
+
+      if (iframe.parentNode) {
+        iframe.parentNode.removeChild(iframe);
+      }
+    }
+
+    form.submit();
+  });
 }
