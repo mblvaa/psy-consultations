@@ -605,3 +605,56 @@ textarea:focus {
     max-height: 44px;
   }
 }
+
+/* Жёсткая фиксация логотипа */
+.brand-mark,
+.brand-mark.logo-mark {
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  flex: 0 0 72px !important;
+  overflow: hidden !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.logo-mark {
+  background: #ffffff !important;
+  padding: 8px !important;
+}
+
+.logo-mark img,
+.brand-mark img,
+.brand img {
+  display: block !important;
+  width: 56px !important;
+  height: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 860px) {
+  .brand-mark,
+  .brand-mark.logo-mark {
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    flex: 0 0 58px !important;
+  }
+
+  .logo-mark img,
+  .brand-mark img,
+  .brand img {
+    width: 44px !important;
+    height: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
+  }
+}
