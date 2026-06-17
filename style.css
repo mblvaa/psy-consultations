@@ -658,3 +658,209 @@ textarea:focus {
     max-height: 44px !important;
   }
 }
+
+/* Улучшенная мобильная версия */
+
+@media (max-width: 760px) {
+  body {
+    background: #fff8ef;
+  }
+
+  .page {
+    width: 100%;
+    padding: 14px 12px 28px;
+  }
+
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .brand {
+    gap: 12px;
+    align-items: center;
+  }
+
+  .brand-text h1 {
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .header-note {
+    padding: 13px 14px;
+    border-radius: 18px;
+    font-size: 14px;
+  }
+
+  .card,
+  .admin-card {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .intro-card h2,
+  .form-card h2,
+  .admin-card h2 {
+    font-size: 24px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .step {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  input,
+  textarea {
+    border-radius: 14px;
+    padding: 13px 14px;
+    font-size: 16px;
+  }
+
+  textarea {
+    min-height: 110px;
+  }
+
+  .consent {
+    padding: 13px;
+    border-radius: 16px;
+    font-size: 14px;
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .legend span {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .schedule-wrap {
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .schedule-grid {
+    min-width: 0 !important;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  .schedule-cell.header,
+  .schedule-cell.time {
+    display: none;
+  }
+
+  .schedule-cell.slot-cell {
+    display: block;
+    min-height: auto;
+    padding: 12px;
+    text-align: left;
+    background: #fffaf4;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+  }
+
+  .schedule-cell.slot-cell::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 8px;
+    color: var(--brown-dark);
+    font-weight: 900;
+    font-size: 14px;
+  }
+
+  .slot-button {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 14px;
+    font-size: 15px;
+  }
+
+  .selected-box {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .primary-button,
+  .secondary-button,
+  .danger-button {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .admin-toolbar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .admin-toolbar-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .admin-slot {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .admin-slot-title {
+    margin-bottom: 4px;
+  }
+
+  .admin-slot-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-slot-actions button {
+    min-height: 42px;
+  }
+
+  .site-footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .site-footer a {
+    display: inline-flex;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 14px;
+    background: #fff3e4;
+    text-decoration: none;
+  }
+}
