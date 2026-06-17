@@ -864,3 +864,9 @@ textarea:focus {
     text-decoration: none;
   }
 }
+
+@media (max-width: 760px) {
+  .schedule-cell.slot-cell {
+    order: var(--mobile-order);
+  }
+}
