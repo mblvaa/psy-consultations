@@ -64,13 +64,13 @@ function renderSchedule() {
     scheduleGrid.appendChild(cell);
   });
 
-  TIMES.forEach((time) => {
+  TIMES.forEach((time, timeIndex) => {
     const timeCell = document.createElement("div");
     timeCell.className = "schedule-cell time";
     timeCell.textContent = time.label;
     scheduleGrid.appendChild(timeCell);
 
-    DAYS.forEach((day) => {
+    DAYS.forEach((day, dayIndex) => {
       const slotId = makeSlotId(day.id, time.id);
       const label = makeSlotLabel(day.label, time.label);
       const isClosed = closedSlotIds.has(slotId);
@@ -79,6 +79,7 @@ function renderSchedule() {
       const cell = document.createElement("div");
 cell.className = "schedule-cell slot-cell";
 cell.dataset.label = label;
+cell.style.setProperty("--mobile-order", String(dayIndex * 100 + timeIndex));
 
       const button = document.createElement("button");
       button.type = "button";
