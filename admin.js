@@ -167,19 +167,21 @@ function renderAdminSchedule() {
     adminScheduleGrid.appendChild(cell);
   });
 
-  ADMIN_TIMES.forEach((time) => {
+  ADMIN_TIMES.forEach((time, timeIndex) => {
     const timeCell = document.createElement("div");
     timeCell.className = "schedule-cell time";
     timeCell.textContent = time.label;
     adminScheduleGrid.appendChild(timeCell);
 
-    ADMIN_DAYS.forEach((day) => {
+    ADMIN_DAYS.forEach((day, dayIndex) => {
       const slotId = makeAdminSlotId(day.id, time.id);
       const label = makeAdminSlotLabel(day.label, time.label);
       const isClosed = adminClosedSlotIds.has(slotId);
 
       const cell = document.createElement("div");
-      cell.className = "schedule-cell";
+cell.className = "schedule-cell slot-cell";
+cell.dataset.label = label;
+cell.style.setProperty("--mobile-order", String(dayIndex * 100 + timeIndex));
 
       const slotBox = document.createElement("div");
       slotBox.className = isClosed ? "admin-slot closed" : "admin-slot";
