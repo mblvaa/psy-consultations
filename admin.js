@@ -34,10 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedPassword = sessionStorage.getItem("psyAdminPassword");
 
   if (savedPassword) {
-    adminPassword = savedPassword;
-    showAdminPanel();
-  } else {
-    renderAdminSchedule();
+    checkPasswordAndEnter(savedPassword);
   }
 });
 
@@ -51,10 +48,7 @@ adminLoginForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  adminPassword = password;
-  sessionStorage.setItem("psyAdminPassword", password);
-
-  showAdminPanel();
+  await checkPasswordAndEnter(password);
 });
 
 refreshButton.addEventListener("click", async () => {
@@ -81,10 +75,40 @@ function getAdminApiUrl() {
   return window.PSY_CONFIG.API_URL;
 }
 
-function showAdminPanel() {
-  loginCard.classList.add("hidden");
-  adminPanel.classList.remove("hidden");
-  loadAdminClosedSlots();
+async function checkPasswordAndEnter(password) {
+  const apiUrl = getAdminApiUrl();
+
+  if (!apiUrl) {
+    return;
+  }
+
+  showAdminMessage("Проверяем пароль…", "success");
+
+  try {
+    const response = await adminJsonp(apiUrl, {
+      action: "checkAdmin",
+      password
+    });
+
+    if (!response.ok) {
+      throw new Error(response.error || "Неверный пароль администратора.");
+    }
+
+    adminPassword = password;
+    sessionStorage.setItem("psyAdminPassword", password);
+
+    loginCard.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+
+    showAdminMessage("", "");
+    await loadAdminClosedSlots();
+
+  } catch (error) {
+    console.error(error);
+    adminPassword = "";
+    sessionStorage.removeItem("psyAdminPassword");
+    showAdminMessage(error.message || "Не удалось войти. Проверьте пароль.", "error");
+  }
 }
 
 function makeAdminSlotId(dayId, timeId) {
@@ -120,6 +144,7 @@ async function loadAdminClosedSlots() {
 
     adminStatus.textContent = "Расписание загружено.";
     renderAdminSchedule();
+
   } catch (error) {
     console.error(error);
     adminStatus.textContent = "Не удалось загрузить закрытые слоты.";
@@ -167,17 +192,26 @@ function renderAdminSchedule() {
       actions.className = "admin-slot-actions";
 
       const button = document.createElement("button");
+      button.type = "button";
 
       if (isClosed) {
         button.className = "open";
-        button.type = "button";
         button.textContent = "Открыть";
-        button.addEventListener("click", () => openAdminSlot({ slotId, label, dayLabel: day.label, time: time.label }));
+        button.addEventListener("click", () => openAdminSlot({
+          slotId,
+          label,
+          dayLabel: day.label,
+          time: time.label
+        }));
       } else {
         button.className = "close";
-        button.type = "button";
         button.textContent = "Закрыть";
-        button.addEventListener("click", () => closeAdminSlot({ slotId, label, dayLabel: day.label, time: time.label }));
+        button.addEventListener("click", () => closeAdminSlot({
+          slotId,
+          label,
+          dayLabel: day.label,
+          time: time.label
+        }));
       }
 
       actions.appendChild(button);
@@ -190,6 +224,12 @@ function renderAdminSchedule() {
 }
 
 async function closeAdminSlot(slot) {
+  const apiUrl = getAdminApiUrl();
+
+  if (!apiUrl) {
+    return;
+  }
+
   if (!adminPassword) {
     showAdminMessage("Сначала войдите с паролем администратора.", "error");
     return;
@@ -197,24 +237,38 @@ async function closeAdminSlot(slot) {
 
   showAdminMessage(`Закрываем слот: ${slot.label}…`, "success");
 
-  await sendAdminAction("closeSlot", {
-    slotId: slot.slotId,
-    dayLabel: slot.dayLabel,
-    time: slot.time,
-    reason: "закрыто администратором"
-  });
+  try {
+    const response = await adminJsonp(apiUrl, {
+      action: "closeSlot",
+      password: adminPassword,
+      slotId: slot.slotId,
+      dayLabel: slot.dayLabel,
+      time: slot.time,
+      reason: "закрыто администратором"
+    });
 
-  await wait(900);
-  await loadAdminClosedSlots();
+    if (!response.ok) {
+      throw new Error(response.error || "Не удалось закрыть слот.");
+    }
 
-  if (adminClosedSlotIds.has(slot.slotId)) {
+    adminClosedSlotIds.add(slot.slotId);
+    renderAdminSchedule();
+
     showAdminMessage(`Слот закрыт: ${slot.label}.`, "success");
-  } else {
-    showAdminMessage("Слот не закрылся. Проверьте пароль администратора и настройки Apps Script.", "error");
+
+  } catch (error) {
+    console.error(error);
+    showAdminMessage(error.message || "Слот не закрылся. Проверьте пароль администратора и настройки Apps Script.", "error");
   }
 }
 
 async function openAdminSlot(slot) {
+  const apiUrl = getAdminApiUrl();
+
+  if (!apiUrl) {
+    return;
+  }
+
   if (!adminPassword) {
     showAdminMessage("Сначала войдите с паролем администратора.", "error");
     return;
@@ -222,36 +276,26 @@ async function openAdminSlot(slot) {
 
   showAdminMessage(`Открываем слот: ${slot.label}…`, "success");
 
-  await sendAdminAction("openSlot", {
-    slotId: slot.slotId,
-    dayLabel: slot.dayLabel,
-    time: slot.time
-  });
+  try {
+    const response = await adminJsonp(apiUrl, {
+      action: "openSlot",
+      password: adminPassword,
+      slotId: slot.slotId
+    });
 
-  await wait(900);
-  await loadAdminClosedSlots();
+    if (!response.ok) {
+      throw new Error(response.error || "Не удалось открыть слот.");
+    }
 
-  if (!adminClosedSlotIds.has(slot.slotId)) {
+    adminClosedSlotIds.delete(slot.slotId);
+    renderAdminSchedule();
+
     showAdminMessage(`Слот открыт: ${slot.label}.`, "success");
-  } else {
-    showAdminMessage("Слот не открылся. Проверьте пароль администратора и настройки Apps Script.", "error");
+
+  } catch (error) {
+    console.error(error);
+    showAdminMessage(error.message || "Слот не открылся. Проверьте пароль администратора и настройки Apps Script.", "error");
   }
-}
-
-async function sendAdminAction(action, data) {
-  const apiUrl = getAdminApiUrl();
-
-  if (!apiUrl) {
-    return;
-  }
-
-  const payload = {
-    action,
-    password: adminPassword,
-    data
-  };
-
-  await postToAppsScript(apiUrl, payload);
 }
 
 function adminJsonp(url, params) {
@@ -300,58 +344,4 @@ function showAdminMessage(text, type) {
   adminMessage.hidden = false;
   adminMessage.textContent = text;
   adminMessage.className = `message ${type}`;
-}
-
-function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function postToAppsScript(url, payload) {
-  return new Promise((resolve) => {
-    const iframeName = `psyAdminPostFrame_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
-
-    const iframe = document.createElement("iframe");
-    iframe.name = iframeName;
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = url;
-    form.target = iframeName;
-    form.style.display = "none";
-
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "payload";
-    input.value = JSON.stringify(payload);
-
-    form.appendChild(input);
-    document.body.appendChild(form);
-
-    const timer = setTimeout(() => {
-      cleanup();
-      resolve({ ok: true });
-    }, 1500);
-
-    iframe.onload = () => {
-      clearTimeout(timer);
-      setTimeout(() => {
-        cleanup();
-        resolve({ ok: true });
-      }, 200);
-    };
-
-    function cleanup() {
-      if (form.parentNode) {
-        form.parentNode.removeChild(form);
-      }
-
-      if (iframe.parentNode) {
-        iframe.parentNode.removeChild(iframe);
-      }
-    }
-
-    form.submit();
-  });
 }
