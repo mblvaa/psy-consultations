@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Запись на психологическую консультацию</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="page">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">
+          <span>П</span>
+        </div>
+
+        <div class="brand-text">
+          <p class="eyebrow">Служба психологической поддержки</p>
+          <h1>Запись на консультацию</h1>
+        </div>
+      </div>
+
+      <p class="header-note">
+        Выберите несколько удобных вариантов времени. Окончательное время консультации будет согласовано отдельно.
+      </p>
+    </header>
+
+    <main>
+      <section class="card intro-card">
+        <h2>Как это работает</h2>
+
+        <div class="steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <p>Заполните короткую форму.</p>
+          </div>
+
+          <div class="step">
+            <span class="step-number">2</span>
+            <p>Выберите один или несколько удобных временных слотов.</p>
+          </div>
+
+          <div class="step">
+            <span class="step-number">3</span>
+            <p>Отправьте заявку. Специалист свяжется с вами для согласования.</p>
+          </div>
+        </div>
+
+        <p class="soft-warning">
+          Выбранные вами слоты не бронируются автоматически и не становятся занятыми на сайте.
+        </p>
+      </section>
+
+      <form id="consultForm" class="card form-card">
+        <div class="section-heading">
+          <p class="eyebrow">Шаг 1</p>
+          <h2>Данные для связи</h2>
+        </div>
+
+        <div class="form-grid">
+          <label class="field">
+            <span>Имя и фамилия</span>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              placeholder="Например: Иванова Мария"
+              autocomplete="name"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span>Учебная группа</span>
+            <input
+              id="group"
+              name="group"
+              type="text"
+              placeholder="Например: 2Ф-31"
+              required
+            />
+          </label>
+
+          <label class="field field-wide">
+            <span>Способ связи</span>
+            <input
+              id="contact"
+              name="contact"
+              type="text"
+              placeholder="Email или Telegram username"
+              required
+            />
+          </label>
+
+          <label class="field field-wide">
+            <span>Краткое описание проблемы</span>
+            <textarea
+              id="problem"
+              name="problem"
+              rows="5"
+              placeholder="Можно написать коротко: с чем нужна помощь, что беспокоит, насколько срочно."
+              required
+            ></textarea>
+          </label>
+        </div>
+
+        <label class="consent">
+          <input id="consent" name="consent" type="checkbox" required />
+          <span>
+            Я согласен/согласна на обработку персональных данных для записи на психологическую консультацию.
+          </span>
+        </label>
+
+        <div class="section-heading schedule-heading">
+          <p class="eyebrow">Шаг 2</p>
+          <h2>Выберите удобное время</h2>
+          <p>
+            Можно выбрать несколько вариантов. Недоступные слоты закрываются администратором и неактивны для выбора.
+          </p>
+        </div>
+
+        <div class="legend">
+          <span><i class="legend-dot free"></i> Доступно</span>
+          <span><i class="legend-dot selected"></i> Выбрано вами</span>
+          <span><i class="legend-dot closed"></i> Недоступно</span>
+        </div>
+
+        <div id="scheduleStatus" class="status-line">
+          Загружаем расписание…
+        </div>
+
+        <div class="schedule-wrap">
+          <div id="scheduleGrid" class="schedule-grid" aria-label="Расписание консультаций">
+            <!-- Расписание создаётся автоматически через app.js -->
+          </div>
+        </div>
+
+        <div class="selected-box">
+          <h3>Выбранные варианты</h3>
+          <p id="selectedSummary">Пока ничего не выбрано.</p>
+        </div>
+
+        <div id="statusMessage" class="message" hidden></div>
+
+        <div class="actions">
+          <button id="submitButton" class="primary-button" type="submit">
+            Отправить заявку
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Если ситуация требует срочной помощи, обратитесь к дежурному специалисту, классному руководителю или в экстренные службы.
+      </p>
+
+      <a href="admin.html">Вход для администратора</a>
+    </footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
