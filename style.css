@@ -522,7 +522,19 @@ textarea:focus {
     font-size: 26px;
     border-radius: 18px;
   }
+  
+.logo-mark {
+  background: #ffffff;
+  padding: 8px;
+  overflow: hidden;
+}
 
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
   .steps,
   .form-grid {
     grid-template-columns: 1fr;
