@@ -77,7 +77,8 @@ function renderSchedule() {
       const isSelected = selectedSlots.has(slotId);
 
       const cell = document.createElement("div");
-      cell.className = "schedule-cell";
+cell.className = "schedule-cell slot-cell";
+cell.dataset.label = label;
 
       const button = document.createElement("button");
       button.type = "button";
